@@ -26,8 +26,6 @@ map.on("click", function (event) {
       if (marker) {
         map.removeLayer(marker)
       }
-      console.log("AQUI PRINTING META");
-      console.log(meta);
       reachid = meta[0];
       drain_area = meta[1];
       region = meta[2];
@@ -47,22 +45,18 @@ map.on("click", function (event) {
 //--B) ADD THE ABILITY TO CHANGE CONTENT BETWEEN THE TABS OF THE MODAL
 // USE OF CHANGE EVENTS USING A THIRD PARTY LIBRARY  //
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-  console.log(e);
   var target = $(e.target).attr("href") // activated tab
   if(target!=="#forecast" && target !=="#historical"){
-    console.log("show seasonal");
     $('#forecast-chart').hide();
     $('#historical-chart').hide();
     $('#seasonal-chart').show()
   }
   if(target!=="#historical" && target !=="#seasonal"){
-    console.log("show forecast");
     $('#forecast-chart').show();
     $('#historical-chart').hide();
     $('#seasonal-chart').hide()
   }
   if(target!=="#forecast" && target !=="#seasonal"){
-    console.log("show historical");
     $('#forecast-chart').hide();
     $('#historical-chart').show();
     $('#seasonal-chart').hide()
