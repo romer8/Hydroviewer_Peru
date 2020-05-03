@@ -1,8 +1,9 @@
 // HYDROVIEWER PERU//
 
-// PART 1: Define Map and also center around the contry of interest in this case PERU//
+// PART 1: USE OF THIRD PARTY LIBRARIES (LEAFLET)
 
-// a) Add the drainage layer
+//--A) CREATE AND CENTER THE MAP IN PERU, ADD A WMS LAYER
+// USE OF LEAFLET //
 var map = L.map('map').setView([-9.046374, -77.042793], 6);
 L.esri.basemapLayer('DarkGray').addTo(map);
 var drainageWMSLayer;
@@ -13,14 +14,41 @@ drainageWMSLayer = L.tileLayer.betterWms(url, {
     transparent: true
 }).addTo(map);
 
-//b)Add the ability to add forecast, historical, seasonal data related to the reach_id
+// PART 2: ADD A CLICK AND THIRD PARTY EVENT LISTENER TO THE MAP AND TABS RESPECTIVELY. IN ADDITION,
+// MANAGING A DOM ELEMENT WITH JAVASCRIPT//
+
+//--A) ADD THE ABILITY TO ADD A MODAL WITH FORECAST, HISTORICAL, SEASONAL DATA WITH A CLICK
+// USE OF CLICK EVENTS //
 var marker = null;
+map.on("click", function (event) {
+    meta = drainageWMSLayer.GetFeatureInfo(event);
+    if(meta[0] !==null){
+      if (marker) {
+        map.removeLayer(marker)
+      }
+      console.log("AQUI PRINTING META");
+      console.log(meta);
+      reachid = meta[0];
+      drain_area = meta[1];
+      region = meta[2];
+      marker = L.marker(event.latlng).addTo(map);
+
+      $("#obsgraph").modal('show');
+      FORECAST.graph_f(reachid,"forecast-chart",700,700);
+      HISTORICAL.graph_h(reachid,"historical-chart",700,700);
+      SEASONAL.graph_s(reachid,"seasonal-chart",700,700);
+      // --C) MODIFY THE DOM USING JAVASCRIPT //
+      var modalTitle = document.getElementById("titleOfModal");
+      modalTitle.innerHTML = region;
+
+    }
+
+});
+//--B) ADD THE ABILITY TO CHANGE CONTENT BETWEEN THE TABS OF THE MODAL
+// USE OF CHANGE EVENTS USING A THIRD PARTY LIBRARY  //
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   console.log(e);
   var target = $(e.target).attr("href") // activated tab
-  // $(`${target}`).addClass('hidden');
-  console.log(target);
-  // alert(target);
   if(target!=="#forecast" && target !=="#historical"){
     console.log("show seasonal");
     $('#forecast-chart').hide();
@@ -39,55 +67,4 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     $('#historical-chart').show();
     $('#seasonal-chart').hide()
   }
-
 });
-map.on("click", function (event) {
-    if (marker) {
-      map.removeLayer(marker)
-    }
-    meta = drainageWMSLayer.GetFeatureInfo(event);
-    reachid = meta[0];
-    drain_area = meta[1];
-    marker = L.marker(event.latlng).addTo(map);
-    // marker.bindPopup(`<div id="forecast"></div>`);
-    $("#obsgraph").modal('show');
-    // $('#forecast-chart').addClass('hidden');
-    // $('#historical-chart').addClass('hidden');
-    // $('#seasonal-chart').addClass('hidden');
-    // forecastShow(reachid);
-    // historicalShow(reachid);
-    // seasonalShow(reachid);
-    FORECAST.graph_f(reachid,"forecast-chart",700,700);
-    HISTORICAL.graph_h(reachid,"historical-chart",700,700);
-    SEASONAL.graph_s(reachid,"seasonal-chart",700,700);
-    // marker.openPopup()
-
-    // $("#forecast-table").html('');
-    // $("#chart_modal").modal('show');
-});
-
-// function forecastShow(reachid){
-//   $('#forecast-chart').removeClass('hidden');
-//   $('#historical-chart').addClass('hidden');
-//   $('#seasonal-chart').addClass('hidden');
-//
-//   // $('#historical-chart').hide();
-//   // $('#seasonal-chart').hide();
-//   FORECAST.graph_f(reachid,"forecast-chart",700,700);
-// }
-// function historicalShow(reachid){
-//   $('#historical-chart').removeClass('hidden');
-//   $('#forecast-chart').addClass('hidden');
-//   $('#seasonal-chart').addClass('hidden');
-//   // $('#forecast-chart').hide();
-//   // $('#seasonal-chart').hide();
-//   HISTORICAL.graph_h(reachid,"historical-chart",700,700);
-// }
-// function seasonalShow(reachid){
-//   $('#seasonal-chart').removeClass('hidden');
-//   $('#forecast-chart').addClass('hidden');
-//   $('#historical-chart').addClass('hidden');
-//   // $('#forecast-chart').hide();
-//   // $('#historical-chart').hide();
-//   SEASONAL.graph_s(reachid,"seasonal-chart",700,700);
-// }
