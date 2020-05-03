@@ -1,0 +1,25 @@
+ #map {
+   position: absolute;
+   top:0;
+   bottom:0;
+   right:0;
+   left:0;
+   /* height:600px; */
+   /* height:100%; */
+   /* width:100%; */
+}
+/* #bottomPart{
+  height:100%;
+  width:100%;
+} */
+
+#obsgraph {
+    height: 100%;
+}
+
+
+#obsgraph .modal-dialog {
+  width: 75%;
+  height: 75%;
+  padding: 0;
+}
