@@ -12,6 +12,7 @@ drainageWMSLayer = L.tileLayer.betterWms(url, {
 //part 2
 
 var marker = null;
+
 map.on("click", function (event) {
     if (marker) {
       map.removeLayer(marker)
@@ -21,13 +22,15 @@ map.on("click", function (event) {
     drain_area = meta[1];
     marker = L.marker(event.latlng).addTo(map);
     // marker.bindPopup(`<div id="forecast"></div>`);
-    FORECAST.graph_f(reachid,"forecast-chart");
-    HISTORICAL.graph_h(reachid,"historical-chart");
-    SEASONAL.graph_s(reachid,"seasonal-chart");
-    // marker.openPopup()
     $("#obsgraph").modal('show');
     $('#forecast-chart').addClass('hidden');
     $('#historical-chart').addClass('hidden');
+    $('#seasonal-chart').addClass('hidden');
+    FORECAST.graph_f(reachid,"forecast-chart",700,700);
+    HISTORICAL.graph_h(reachid,"historical-chart");
+    SEASONAL.graph_s(reachid,"seasonal-chart");
+    // marker.openPopup()
+
     // $("#forecast-table").html('');
     // $("#chart_modal").modal('show');
 });
