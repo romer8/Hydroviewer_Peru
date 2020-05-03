@@ -17,9 +17,9 @@
     height: 100%;
 }
 
-#obsgraph a {
-  color: white;
-
+#obsgraph li {
+  color: black;
+  padding: 2% 2% 2% 2%;
 }
 #obsgraph .modal-dialog {
   width: 75%;
